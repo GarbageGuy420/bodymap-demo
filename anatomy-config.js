@@ -1,6 +1,6 @@
 var basic_config = {
     "basic_1":{//head
-        "hover": "HEAD"<br></br>"$$$"<br></br>,//info of the popup
+        "hover": "HEAD<br></br>$$$"<br></br>,//info of the popup
         "url": "none",//link to any webpage
         "target": "none",// use "_blank", "_self", or "none"
         "active": true//true/false to show/hide
