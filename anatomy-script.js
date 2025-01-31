@@ -1,20 +1,23 @@
-(function($) {
+( function( $ ) {
+
     "use strict";
 
     function isTouchEnabled() {
-        return (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+    return (('ontouchstart' in window)
+        || (navigator.MaxTouchPoints > 0)
+        || (navigator.msMaxTouchPoints > 0));
     }
 
-    let selectedPart = null; // Store the currently selected part
+    let selectedPart = null;
 
     $(document).ready(function () {
-        $("path[id^='basic_']").each(function (i, e) {
+        $("path[id^=\"basic_\"]").each(function (i, e) {
             addEvent($(e).attr('id'));
         });
 
-        // Deselect when clicking outside the body map
         $(document).on('mousedown touchstart', function (e) {
-            if (!$(e.target).closest("#basic-wrapper").length) {
+            // Only reset selection if clicking outside any valid body part
+            if (!$(e.target).is("path[id^=\"basic_\"]")) {
                 resetSelection();
             }
         });
@@ -59,7 +62,7 @@
 
             if (basic_config[id]['target'] !== 'none') {
                 _obj.on('mousedown', function () {
-                    _obj.css({'fill': 'rgba(255, 0, 0, 0.5)'});
+                    _obj.css({'fill': 'rgba(255, 0, 0, 0.7)'});
                 });
             }
             _obj.on('mousemove', function (e) {
@@ -79,16 +82,15 @@
     }
 
     function selectPart(id, _obj) {
-        resetSelection(); // Deselect previously selected part
+        resetSelection();
         selectedPart = id;
-        _obj.css({'fill': 'rgba(255, 0, 0, 0.5)'}); // Lower opacity for new selection
+        _obj.css({'fill': 'rgba(255, 0, 0, 0.5)'});
     }
 
     function resetSelection() {
         if (selectedPart) {
             $('#' + selectedPart).css({'fill': 'rgba(255, 0, 0, 0)'});
             selectedPart = null;
-            $('#tip-basic').hide();
         }
     }
 })(jQuery);
