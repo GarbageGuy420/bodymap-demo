@@ -1,6 +1,6 @@
 var basic_config = {
     "basic_1":{//head
-        "hover": "Head\n$$$\n🟢🟡🔴",//info of the popup
+        "hover": "Head<br>$$$<br>🔴🔴🔴",//info of the popup
         "url": "https://www.humananatomyillustrations.com/",//link to any webpage
         "target": "none",// use "_blank", "_self", or "none"
         "active": true//true/false to show/hide
