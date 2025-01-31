@@ -49,16 +49,12 @@
                 if (selectedPart !== id) {
                     _obj.css({'fill': 'rgba(255, 0, 0, 0.3)'});
                 }
-                if (selectedPart === id) {
-                    $('#tip-basic').show().html(basic_config[id]['hover']);
-                }
+                $('#tip-basic').show().html(basic_config[id]['hover']);
             }).on('mouseleave', function () {
                 if (selectedPart !== id) {
                     _obj.css({'fill': 'rgba(255, 0, 0, 0)'});
                 }
-                if (selectedPart !== id) {
-                    $('#tip-basic').hide();
-                }
+                $('#tip-basic').hide();
             });
 
             if (basic_config[id]['target'] !== 'none') {
@@ -86,7 +82,6 @@
         resetSelection(); // Deselect previously selected part
         selectedPart = id;
         _obj.css({'fill': 'rgba(255, 0, 0, 0.5)'}); // Lower opacity for new selection
-        $('#tip-basic').show().html(basic_config[id]['hover']); // Make hover persistent
     }
 
     function resetSelection() {
