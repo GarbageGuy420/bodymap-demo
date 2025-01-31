@@ -1,7 +1,7 @@
 var basic_config = {
     "basic_1": {//head
         "hover": "HEAD",//info of the popup
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=HEAD",//link to JotForm with pre-filled selection
+        "url": "https://form.jotform.com/250295484302051",//link to JotForm with pre-filled selection
         "target": "_blank",// opens in a new tab
         "active": true//true/false to show/hide
     },
