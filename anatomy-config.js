@@ -6,42 +6,42 @@ var basic_config = {
         "active": true//true/false to show/hide
     },
     "basic_2":{//neck
-        "hover": "NECK",
+        "hover": "NECK<br>$$$<br>🔴🔴🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_3":{//chest
-        "hover": "CHEST",
+        "hover": "CHEST<br>$$<br>🔴🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_4":{//abdomen
-        "hover": "ABDOMEN",
+        "hover": "ABDOMEN<br>$$<br>🔴🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_5":{//pelvis
-        "hover": "PELVIS",
+        "hover": "PELVIS<br>$$$<br>🔴🔴🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_6":{//arm-rt
-        "hover": "ARM [RT]",
+        "hover": "ARM [RT]<br>$<br>🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_7":{//arm-lt
-        "hover": "ARM [LT]",
+        "hover": "ARM [LT]<br>$<br>🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_8":{//leg-rt
-        "hover": "LEG [RT]",
+        "hover": "LEG [RT]<br>$<br>🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_9":{//leg-lt
-        "hover": "LEG [LT]",
+        "hover": "LEG [LT]<br>$<br>🔴",
         "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     }
