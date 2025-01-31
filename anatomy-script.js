@@ -13,7 +13,7 @@
         });
 
         // Deselect when clicking outside the body map
-        $(document).on('click', function (e) {
+        $(document).on('mousedown touchstart', function (e) {
             if (!$(e.target).closest("#basic-wrapper").length) {
                 resetSelection();
             }
@@ -49,12 +49,16 @@
                 if (selectedPart !== id) {
                     _obj.css({'fill': 'rgba(255, 0, 0, 0.3)'});
                 }
-                $('#tip-basic').show().html(basic_config[id]['hover']);
+                if (selectedPart === id) {
+                    $('#tip-basic').show().html(basic_config[id]['hover']);
+                }
             }).on('mouseleave', function () {
                 if (selectedPart !== id) {
                     _obj.css({'fill': 'rgba(255, 0, 0, 0)'});
                 }
-                $('#tip-basic').hide();
+                if (selectedPart !== id) {
+                    $('#tip-basic').hide();
+                }
             });
 
             if (basic_config[id]['target'] !== 'none') {
@@ -82,12 +86,14 @@
         resetSelection(); // Deselect previously selected part
         selectedPart = id;
         _obj.css({'fill': 'rgba(255, 0, 0, 0.5)'}); // Lower opacity for new selection
+        $('#tip-basic').show().html(basic_config[id]['hover']); // Make hover persistent
     }
 
     function resetSelection() {
         if (selectedPart) {
             $('#' + selectedPart).css({'fill': 'rgba(255, 0, 0, 0)'});
             selectedPart = null;
+            $('#tip-basic').hide();
         }
     }
 })(jQuery);
