@@ -5,11 +5,18 @@
         return (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
     }
 
-    let selectedParts = {}; // Object to store selected parts
+    let selectedPart = null; // Store the currently selected part
 
     $(document).ready(function () {
         $("path[id^='basic_']").each(function (i, e) {
             addEvent($(e).attr('id'));
+        });
+
+        // Deselect when clicking outside the body map
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest("#basic-wrapper").length) {
+                resetSelection();
+            }
         });
     });
 
@@ -25,7 +32,7 @@
                 var touchmoved;
                 _obj.on('touchend', function (e) {
                     if (touchmoved !== true) {
-                        toggleSelection(id, _obj);
+                        selectPart(id, _obj);
                     }
                 }).on('touchmove', function () {
                     touchmoved = true;
@@ -35,16 +42,16 @@
             }
 
             _obj.on('mouseup', function () {
-                toggleSelection(id, _obj);
+                selectPart(id, _obj);
             });
 
             _obj.on('mouseenter', function () {
-                if (!selectedParts[id]) {
+                if (selectedPart !== id) {
                     _obj.css({'fill': 'rgba(255, 0, 0, 0.3)'});
                 }
                 $('#tip-basic').show().html(basic_config[id]['hover']);
             }).on('mouseleave', function () {
-                if (!selectedParts[id]) {
+                if (selectedPart !== id) {
                     _obj.css({'fill': 'rgba(255, 0, 0, 0)'});
                 }
                 $('#tip-basic').hide();
@@ -52,7 +59,7 @@
 
             if (basic_config[id]['target'] !== 'none') {
                 _obj.on('mousedown', function () {
-                    _obj.css({'fill': 'rgba(255, 0, 0, 0.7)'});
+                    _obj.css({'fill': 'rgba(255, 0, 0, 0.5)'});
                 });
             }
             _obj.on('mousemove', function (e) {
@@ -71,13 +78,16 @@
         }
     }
 
-    function toggleSelection(id, _obj) {
-        if (selectedParts[id]) {
-            delete selectedParts[id];
-            _obj.css({'fill': 'rgba(255, 0, 0, 0)'}); // Reset color when deselected
-        } else {
-            selectedParts[id] = true;
-            _obj.css({'fill': 'rgba(255, 0, 0, 0.7)'}); // Highlight when selected
+    function selectPart(id, _obj) {
+        resetSelection(); // Deselect previously selected part
+        selectedPart = id;
+        _obj.css({'fill': 'rgba(255, 0, 0, 0.5)'}); // Lower opacity for new selection
+    }
+
+    function resetSelection() {
+        if (selectedPart) {
+            $('#' + selectedPart).css({'fill': 'rgba(255, 0, 0, 0)'});
+            selectedPart = null;
         }
     }
 })(jQuery);
