@@ -1,48 +1,48 @@
 var basic_config = {
     "basic_1":{//head
         "hover": "HEAD",//info of the popup
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=HEAD",//link to any webpage
-        "target": "_self",// use "_blank", "_self", or "none"
+        "url": "https://www.humananatomyillustrations.com/",//link to any webpage
+        "target": "none",// use "_blank", "_self", or "none"
         "active": true//true/false to show/hide
     },
     "basic_2":{//neck
         "hover": "NECK",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=NECK", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_3":{//chest
         "hover": "CHEST",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=CHEST", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_4":{//abdomen
         "hover": "ABDOMEN",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=ABDOMEN", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_5":{//pelvis
         "hover": "PELVIS",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=PELVIS", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_6":{//arm-rt
         "hover": "ARM [RT]",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=ARM_RT", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_7":{//arm-lt
         "hover": "ARM [LT]",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=ARM_LT", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_8":{//leg-rt
         "hover": "LEG [RT]",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=LEG_RT", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     },
     "basic_9":{//leg-lt
         "hover": "LEG [LT]",
-        "url": "https://form.jotform.com/250295484302051?selectedPlacement=LEG_LT", "target": "_self",
+        "url": "https://www.humananatomyillustrations.com/", "target": "none",
         "active": true
     }
 };
