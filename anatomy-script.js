@@ -62,9 +62,48 @@
         }
     }
 
-    // ✅ Notify Jotform when the widget is ready
+    // ✅ Fetch data from the parent form when the widget loads
     JFCustomWidget.subscribe("ready", function () {
-        console.log("Widget Ready.");
+        console.log("Widget Ready. Requesting data from parent form...");
+
+        // ✅ Example: Fetching a form setting (like previous placement)
+        JFCustomWidget.getWidgetSetting("previousPlacement", function(value) {
+            if (value) {
+                console.log("Previous Placement from form:", value);
+                highlightPreviousSelection(value);
+            }
+        });
+
+        // ✅ Example: Requesting a field value (like if it's the first tattoo)
+        JFCustomWidget.subscribe("change", function(data) {
+            if (data && data.name === "typeA") {
+                console.log("First Tattoo Field Updated:", data.value);
+                handleFirstTattooRestriction(data.value);
+            }
+        });
     });
+
+    function highlightPreviousSelection(placement) {
+        $("path[id^='basic_']").each(function () {
+            if ($(this).attr('id') === placement) {
+                $(this).css({'fill': 'rgba(0, 0, 255, 0.3)'}); // Highlight in blue
+            }
+        });
+    }
+
+    function handleFirstTattooRestriction(value) {
+        const isFirstTattoo = value.toLowerCase() === "yes";
+        const torsoOption = $('#basic_torso');
+
+        if (isFirstTattoo) {
+            torsoOption.css({'fill': 'rgba(100, 100, 100, 0.5)', 'cursor': 'not-allowed'});
+            torsoOption.off("mouseup"); // Disable clicking torso
+            console.log("Torso selection disabled for first tattoo.");
+        } else {
+            torsoOption.css({'fill': '', 'cursor': 'pointer'});
+            addEvent("basic_torso"); // Re-enable torso selection
+            console.log("Torso selection enabled.");
+        }
+    }
 
 })(jQuery);
