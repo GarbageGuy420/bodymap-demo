@@ -33,19 +33,5 @@
   </div><!-- basic-basea-->
 </div><!-- basic-wrapper-->
 <div class="clear"></div>
-  <script>
-  (function ($) {
-      "use strict";
-      $(document).ready(function () {
-          updateBodyMap();
-          if (typeof JFCustomWidget !== "undefined") {
-              console.log("Jotform Widget API loaded.");
-              initializeJotformIntegration();
-          } else {
-              console.warn("JFCustomWidget not found. Make sure you're testing inside Jotform.");
-          }
-      });
-  })(jQuery);
-</script>
 </body>
 </html>
