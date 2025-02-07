@@ -8,7 +8,8 @@
     }
 
     $(document).ready(function () {
-        updateBodyMap(); // ✅ Initialize map based on `anatomy-config.js`
+        console.log("Document Ready: Initializing body map...");
+        updateBodyMap(); // ✅ Load Body Map
 
         // ✅ Ensure JotForm API is available before calling it
         if (typeof JFCustomWidget !== "undefined") {
@@ -118,6 +119,8 @@
     }
 
     function fetchFirstTattooStatus() {
+        console.log("Fetching 'First Tattoo' status from form...");
+
         JF.getFormSubmissions("250346801308047", function(response) {
             if (response.length > 0) {
                 const submission = response[0]; // Get the latest submission
@@ -125,11 +128,14 @@
 
                 console.log("Fetched First Tattoo Status:", firstTattooAnswer);
                 handleFirstTattooRestriction(firstTattooAnswer);
+            } else {
+                console.log("No submissions found for this form.");
             }
         });
     }
 
     function handleFirstTattooRestriction(value) {
+        console.log("Handling tattoo restriction for:", value);
         const isFirstTattoo = value.toLowerCase() === "yes";
 
         // ✅ Find torso parts dynamically from `anatomy-config.js`
@@ -138,15 +144,16 @@
         });
 
         torsoParts.forEach(partID => {
+            let partElement = $('#' + partID);
+
             if (isFirstTattoo) {
-                anatomy_config[partID]['active'] = false; // ✅ Disable body part in config
-                $('#' + partID).hide();
-                console.log(`Disabled: ${anatomy_config[partID]['hover']}`);
+                console.log(`Disabling ${anatomy_config[partID]['hover']}`);
+                partElement.css({fill: "rgba(100, 100, 100, 0.5)", pointerEvents: "none"});
+                partElement.off(); // ✅ Remove all click/mouse events
             } else {
-                anatomy_config[partID]['active'] = true; // ✅ Re-enable body part in config
-                $('#' + partID).show();
-                addEvent(partID);
-                console.log(`Enabled: ${anatomy_config[partID]['hover']}`);
+                console.log(`Enabling ${anatomy_config[partID]['hover']}`);
+                partElement.css({fill: "rgba(255, 0, 0, 0)", pointerEvents: "auto"});
+                addEvent(partID); // ✅ Reattach events
             }
         });
 
