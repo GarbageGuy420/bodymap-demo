@@ -8,10 +8,27 @@
     }
 
     $(document).ready(function () {
-        $("path[id^='basic_']").each(function (i, e) {
-            addEvent($(e).attr('id'));
-        });
+        updateBodyMap(); // ✅ Initialize map based on `anatomy-config.js`
+
+        // ✅ Ensure JotForm API is available before calling it
+        if (typeof JFCustomWidget !== "undefined") {
+            console.log("Jotform Widget API loaded.");
+            initializeJotformIntegration();
+        } else {
+            console.warn("JFCustomWidget not found. Make sure you're testing inside Jotform.");
+        }
     });
+
+    function updateBodyMap() {
+        $("path[id^='basic_']").each(function (i, e) {
+            let id = $(e).attr('id');
+            if (anatomy_config[id] && anatomy_config[id]['active'] === true) {
+                addEvent(id);
+            } else {
+                $(e).hide(); // ✅ Hide disabled body parts
+            }
+        });
+    }
 
     function addEvent(id) {
         var _obj = $('#' + id);
@@ -20,11 +37,11 @@
         _obj.attr({'fill': 'rgba(255, 0, 0, 0)', 'stroke': 'rgba(255, 102, 102, 1)'});
         _obj.attr({'cursor': 'default'});
 
-        if (basic_config[id]['active'] === true) {
+        if (anatomy_config[id]['active'] === true) {
             _obj.attr({'cursor': 'pointer'});
 
             _obj.on('mouseenter', function () {
-                $('#tip-basic').show().html(basic_config[id]['hover']);
+                $('#tip-basic').show().html(anatomy_config[id]['hover']);
                 _obj.css({'fill': 'rgba(255, 0, 0, 0.3)'});
             }).on('mouseleave', function () {
                 $('#tip-basic').hide();
@@ -33,7 +50,7 @@
 
             _obj.on('mouseup', function () {
                 _obj.css({'fill': 'rgba(255, 0, 0, 0.3)'});
-                sendPlacement(basic_config[id]['hover']); // ✅ Send selected body part to Jotform
+                sendPlacement(anatomy_config[id]['hover']); // ✅ Send selected body part to Jotform
             });
 
             _obj.on('mousemove', function (e) {
@@ -49,7 +66,7 @@
                 $abasic.css({left: x, top: y});
             });
         } else {
-            _obj.hide();
+            _obj.hide(); // ✅ Hide elements if disabled
         }
     }
 
@@ -57,31 +74,40 @@
         console.log("Sending selected placement:", selection);
         if (typeof JFCustomWidget !== "undefined") {
             JFCustomWidget.sendData({ value: selection });
+
+            // ✅ Also update the "Placement Selection" field in Jotform
+            JFCustomWidget.sendData({ placementSelection: selection });
+
         } else {
             console.warn("JFCustomWidget not found - running outside Jotform.");
         }
     }
 
-    // ✅ Fetch data from the parent form when the widget loads
-    JFCustomWidget.subscribe("ready", function () {
-        console.log("Widget Ready. Requesting data from parent form...");
+    // ✅ Initialize Jotform API communication
+    function initializeJotformIntegration() {
+        JFCustomWidget.subscribe("ready", function () {
+            console.log("Widget Ready. Requesting data from parent form...");
 
-        // ✅ Example: Fetching a form setting (like previous placement)
-        JFCustomWidget.getWidgetSetting("previousPlacement", function(value) {
-            if (value) {
-                console.log("Previous Placement from form:", value);
-                highlightPreviousSelection(value);
-            }
-        });
+            // ✅ Listen for "First Tattoo" updates
+            JFCustomWidget.subscribe("change", function(data) {
+                if (data && data.name === "typeA") {
+                    console.log("First Tattoo Field Updated:", data.value);
+                    handleFirstTattooRestriction(data.value);
+                }
+            });
 
-        // ✅ Example: Requesting a field value (like if it's the first tattoo)
-        JFCustomWidget.subscribe("change", function(data) {
-            if (data && data.name === "typeA") {
-                console.log("First Tattoo Field Updated:", data.value);
-                handleFirstTattooRestriction(data.value);
-            }
+            // ✅ Request initial state
+            JFCustomWidget.getWidgetSetting("previousPlacement", function(value) {
+                if (value) {
+                    console.log("Previous Placement from form:", value);
+                    highlightPreviousSelection(value);
+                }
+            });
+
+            // ✅ Fetch "First Tattoo" answer dynamically
+            fetchFirstTattooStatus();
         });
-    });
+    }
 
     function highlightPreviousSelection(placement) {
         $("path[id^='basic_']").each(function () {
@@ -91,19 +117,40 @@
         });
     }
 
+    function fetchFirstTattooStatus() {
+        JF.getFormSubmissions("250346801308047", function(response) {
+            if (response.length > 0) {
+                const submission = response[0]; // Get the latest submission
+                const firstTattooAnswer = submission.answers["3"].answer; // ID 3 is "First Tattoo"
+
+                console.log("Fetched First Tattoo Status:", firstTattooAnswer);
+                handleFirstTattooRestriction(firstTattooAnswer);
+            }
+        });
+    }
+
     function handleFirstTattooRestriction(value) {
         const isFirstTattoo = value.toLowerCase() === "yes";
-        const torsoOption = $('#basic_torso');
 
-        if (isFirstTattoo) {
-            torsoOption.css({'fill': 'rgba(100, 100, 100, 0.5)', 'cursor': 'not-allowed'});
-            torsoOption.off("mouseup"); // Disable clicking torso
-            console.log("Torso selection disabled for first tattoo.");
-        } else {
-            torsoOption.css({'fill': '', 'cursor': 'pointer'});
-            addEvent("basic_torso"); // Re-enable torso selection
-            console.log("Torso selection enabled.");
-        }
+        // ✅ Find torso parts dynamically from `anatomy-config.js`
+        const torsoParts = Object.keys(anatomy_config).filter(key => {
+            return anatomy_config[key]['hover'] === "CHEST" || anatomy_config[key]['hover'] === "ABDOMEN";
+        });
+
+        torsoParts.forEach(partID => {
+            if (isFirstTattoo) {
+                anatomy_config[partID]['active'] = false; // ✅ Disable body part in config
+                $('#' + partID).hide();
+                console.log(`Disabled: ${anatomy_config[partID]['hover']}`);
+            } else {
+                anatomy_config[partID]['active'] = true; // ✅ Re-enable body part in config
+                $('#' + partID).show();
+                addEvent(partID);
+                console.log(`Enabled: ${anatomy_config[partID]['hover']}`);
+            }
+        });
+
+        updateBodyMap(); // ✅ Refresh body map
     }
 
 })(jQuery);
